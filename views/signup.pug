@@ -1,0 +1,40 @@
+extends layout
+
+block content
+    h1= title
+    
+    if error
+        .alert.alert-danger(role='alert')
+            span Error: #{error}
+
+    unless success
+        form(method="POST" action="/signup")
+            .form-group
+                label First Name
+                input#input-email.form-control(name='name' type='text', placeholder='First Name')
+            .form-group
+                label Last Name
+                input#input-email.form-control(name='surname' type='text', placeholder='Last Name')
+
+            .form-group
+                label Email address
+                input#input-email.form-control(name='email' type='email', aria-describedby='emailHelp', placeholder='Enter email')
+            .form-group
+                label Password
+                input#exampleInputPassword1.form-control(name='password' type='password', placeholder='Password')
+            button.btn.btn-primary(type='submit') Register
+
+        p#signup-link 
+            | Already registered? &nbsp;
+            a(href="login") Login here.
+    else
+        .alert.alert-success(role='alert')
+            span #{success}
+
+        p
+            | Great, now it's time to  &nbsp;
+            a(href="login") Login!
+
+
+
+
