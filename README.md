@@ -13,7 +13,7 @@ Start
 --------
 In folder run
 ```
-npm run startdev
+npm run devstart
 ```
 
 Use it
