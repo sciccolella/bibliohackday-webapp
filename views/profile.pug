@@ -1,4 +1,30 @@
 extends app
 
 block content
-  p Show user's profile
+
+  unless logged
+    .alert.alert-danger(role='alert')
+      span.glyphicon.glyphicon-exclamation-sign(aria-hidden='true')
+      span.sr-only Error:
+      |   Please log in first
+
+  else
+
+    h3 First Name
+    .panel.panel-default
+      .panel-body
+        | #{data.name}
+
+    h3 Last Name
+    .panel.panel-default
+      .panel-body
+        | #{data.surname}
+
+    h3 E-mail
+    .panel.panel-default
+      .panel-body
+        | #{data.email}
+
+    button#btn-logout.btn.btn-danger.btn-block(type='button' action='#')
+      span.glyphicon.glyphicon-remove-sign(aria-hidden='true')
+      |  Log out

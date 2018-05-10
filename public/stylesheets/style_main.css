@@ -5,3 +5,9 @@
     padding-top: 0px;
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   }
+
+
+  #btn-logout {
+    position:relative;
+    margin-top:180px;
+  }

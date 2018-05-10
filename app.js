@@ -8,6 +8,7 @@ var multer = require('multer');
 var request = require('request');
 
 
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var loginRouter = require('./routes/login');
@@ -18,9 +19,9 @@ var reservationsRouter = require('./routes/reservations');
 var historyRouter = require('./routes/history');
 var profileRouter = require('./routes/profile');
 
-var API_URL = "http://18.222.10.130:5000/api/v1";
+API_URL = "http://18.222.10.130:5000/api/v1";
 
-let AUTH_TOKEN = null;
+AUTH_TOKEN = null;
 
 var upload = multer();
 var app = express();
@@ -83,7 +84,8 @@ app.post('/login', function(req, res){
       console.log(r);
       if (!error && ext_res.statusCode == 202) {
         AUTH_TOKEN = r.token;
-        console.log(r)
+        console.log(AUTH_TOKEN)
+        res.cookie('token', r.token);
         res.redirect('books');
       } else {
         console.log('error');
@@ -91,9 +93,6 @@ app.post('/login', function(req, res){
       }
     }
   );
-
-
-  
 });
 
 app.post('/signup', function(req, res){
@@ -118,10 +117,29 @@ app.post('/signup', function(req, res){
       
     }
   );
-
-  // res.send('ack');
-  // res.redirect('login');
 });
 
+app.get('/profile', function(req, res){
+  if (AUTH_TOKEN === undefined) {
+    console.log('not logged');
+  }
+  console.log(AUTH_TOKEN);
+  
+  // request.get(
+  //   API_URL + '/users',
+  //   {form: {token: AUTH_TOKEN}},
+  //   function (error, ext_res, body) {
+  //     let r = JSON.parse(ext_res.body);
+  //     console.log(r);
+  //     if (!error && ext_res.statusCode == 202) {
+  //       AUTH_TOKEN = r.token;
+  //       console.log(r)
+  //     } else {
+  //       console.log('error');
+  //     }
+  //   }
+  // );
+
+});
 
 module.exports = app;
