@@ -2,3 +2,12 @@ extends app
 
 block content
   p Show user's reservations
+
+  unless logged
+    .alert.alert-danger(role='alert')
+      span.glyphicon.glyphicon-exclamation-sign(aria-hidden='true')
+      span.sr-only Error:
+      |   Please log in first
+
+  else
+    #results

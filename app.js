@@ -6,6 +6,7 @@ var logger = require('morgan');
 var bodyParser = require('body-parser');
 var multer = require('multer');
 var request = require('request');
+var forward = require('http-port-forward');
 
 
 
@@ -18,6 +19,8 @@ var shelvesRouter = require('./routes/shelves');
 var reservationsRouter = require('./routes/reservations');
 var historyRouter = require('./routes/history');
 var profileRouter = require('./routes/profile');
+var book_viewRouter = require('./routes/book_view');
+var shelf_viewRouter = require('./routes/shelf_view');
 
 API_URL = "http://18.222.10.130:5000/api/v1";
 
@@ -45,6 +48,8 @@ app.use('/shelves', shelvesRouter);
 app.use('/reservations', reservationsRouter);
 app.use('/history', historyRouter);
 app.use('/profile', profileRouter);
+app.use('/book_view/', book_viewRouter);
+app.use('/shelf_view/', shelf_viewRouter);
 
 // for parsing application/json
 app.use(bodyParser.json()); 
@@ -119,27 +124,69 @@ app.post('/signup', function(req, res){
   );
 });
 
-app.get('/profile', function(req, res){
-  if (AUTH_TOKEN === undefined) {
-    console.log('not logged');
-  }
-  console.log(AUTH_TOKEN);
+app.post('/books', function(req, res){
+  console.log(req.body);
   
-  // request.get(
-  //   API_URL + '/users',
-  //   {form: {token: AUTH_TOKEN}},
-  //   function (error, ext_res, body) {
-  //     let r = JSON.parse(ext_res.body);
-  //     console.log(r);
-  //     if (!error && ext_res.statusCode == 202) {
-  //       AUTH_TOKEN = r.token;
-  //       console.log(r)
-  //     } else {
-  //       console.log('error');
-  //     }
-  //   }
-  // );
-
+  request.get(
+    API_URL + '/books',
+    {headers: {token: req.cookies.token, 
+          latitude: 45.5241, 
+          longitude: 9.21730, 
+          title: req.body.search_input }},
+    function (error, ext_res, body) {
+      let r = JSON.parse(ext_res.body);
+      console.log(r);
+      if (!error && ext_res.statusCode == 200) {
+        console.log(r.objects[0]);
+        res.render('books', {title: 'Book', search: true, data: r.objects});
+      } else {
+        console.log('error');
+        res.render('books', {title: 'Book', error: r.message});
+      }
+    }
+  );
 });
+
+app.post('/book_view', function (req, res) {
+  console.log(req.body);
+
+  request.get(
+    API_URL + '/books/' + req.body.selection,
+    {headers: {token: req.cookies.token}},
+    function (error, ext_res, body) {
+      console.log(ext_res)
+      let r = JSON.parse(ext_res.body);
+      console.log(r);
+      if (!error && ext_res.statusCode == 200) {
+        console.log(r.objects[0]);
+        res.render('book_view', {title: 'Book', selection: req.body.selection, data: r.objects[0]});
+      } else {
+        console.log('error');
+        res.render('book_view', {title: 'Book', error: r.message});
+      }
+    }
+  );
+})
+
+app.post('/shelf_view', function (req, res) {
+  console.log(req.body);
+
+  request.get(
+    API_URL + '/shelves/' + req.body.selection,
+    {headers: {token: req.cookies.token}},
+    function (error, ext_res, body) {
+      console.log(ext_res.body)
+      let r = JSON.parse(ext_res.body);
+      console.log(r);
+      if (!error && ext_res.statusCode == 200) {
+        console.log(r.objects[0]);
+        res.render('shelf_view', {title: 'Shelf', selection: req.body.selection, data: r.objects});
+      } else {
+        console.log('error');
+        res.render('shelf_view', {title: 'Shelf', error: r.message});
+      }
+    }
+  );
+})
 
 module.exports = app;

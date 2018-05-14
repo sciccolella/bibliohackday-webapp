@@ -1,9 +1,24 @@
 extends app
 
 block content
-  .col-lg-6
-  .input-group
-    input.form-control(type='text', placeholder='Search book...')
-    span.input-group-btn
-      button.btn.btn-default(type='button') 
-        span.glyphicon.glyphicon-search(aria-hidden='true')
+
+  form.form-inline(method="POST" action="/books")
+    input.form-control(type='text', placeholder='Search book...', name="search_input")
+    button.btn.btn-block(type='submit')
+      span.glyphicon.glyphicon-search(aria-hidden='true')
+
+  if error
+    p= error
+
+  if search == true
+    #results
+      each result in data
+        form#result_search(method="POST" action="/book_view")
+          button.btn.btn-secondary(type='submit' name='selection' value=result.idBook) 
+            span Book: #{result.title} in #{result.name}
+          label
+            distance #{result.distance} metri
+
+    
+        
+

@@ -1,4 +1,16 @@
 extends app
 
 block content
-  p Show nearby shelves
+  if error
+    p= error
+
+  else
+    h3 Shelves around you:
+    #results
+
+      each result in data
+        form#result_search(method="POST" action="/shelf_view")
+          button.btn.btn-secondary(type='submit' name='selection' value=result.idShelf) 
+            span Shelf: #{result.name}
+          label
+            distance #{result.distance} metri

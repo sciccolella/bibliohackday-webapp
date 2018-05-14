@@ -1,0 +1,32 @@
+extends app
+
+block content
+
+  if selection == false
+    .alert.alert-danger(role='alert')
+      span.glyphicon.glyphicon-exclamation-sign(aria-hidden='true')
+      span.sr-only Error:
+      |   Please select a book first
+
+  else
+
+    h3 Book
+    .panel.panel-default
+      .panel-body
+        | #{data.title} - #{data.author}
+
+    h3 Shelf
+    .panel.panel-default
+      .panel-body
+        | #{data.Shelf_idShelf}
+
+    h3 Description
+    .panel.panel-default
+      .panel-body
+        | #{data.description}
+
+    button#btn-logout.btn.btn-info.btn-block(type='button' action='#')
+      span.glyphicon.glyphicon-plus-sign(aria-hidden='true')
+      |  Reserve book!
+
+

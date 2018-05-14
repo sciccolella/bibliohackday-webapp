@@ -1,0 +1,19 @@
+extends app
+
+block content
+
+  if selection == false
+    .alert.alert-danger(role='alert')
+      span.glyphicon.glyphicon-exclamation-sign(aria-hidden='true')
+      span.sr-only Error:
+      |   Please select a shelf first
+
+  else
+
+    h4 Available books in Shelf #{selection}:
+
+    each result in data
+        form#result_search(method="POST" action="/book_view")
+          button.btn.btn-secondary(type='submit' name='selection' value=result.idBook) 
+            span #{result.title} - #{result.author}
+

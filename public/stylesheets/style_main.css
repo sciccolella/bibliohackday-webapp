@@ -11,3 +11,13 @@
     position:relative;
     margin-top:180px;
   }
+
+  #results {
+    padding-top: 30px;
+    text-align: center;
+  }
+
+  #result_search {
+    display: inline-block;
+    padding-top: 10px;
+  }
